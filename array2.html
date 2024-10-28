@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #inventory-output {
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+        input {
+            margin: 5px;
+        }
+        button {
+            margin: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Inventory Management System</h1>
+
+<!-- Input fields for item details -->
+<div>
+    <input type="number" id="itemId" placeholder="Item ID" />
+    <input type="text" id="itemName" placeholder="Item Name" />
+    <input type="number" id="itemQuantity" placeholder="Quantity" />
+    <input type="number" id="itemPrice" placeholder="Price" step="0.01" />
+</div>
+
+<!-- Action buttons -->
+<div>
+    <button onclick="addItemToInventory()">Add Item</button>
+    <button onclick="updateItemInInventory()">Update Item</button>
+    <button onclick="deleteItemFromInventory()">Delete Item</button>
+    <button onclick="getItemFromInventory()">Get Item</button>
+    <button onclick="printInventory()">Print Inventory</button>
+</div>
+
+<!-- Output section for inventory details -->
+<div id="inventory-output"></div>
+
+<script>
+// JavaScript code from the previous answer, with slight modifications for interaction with HTML elements
+let inventory = [
+    { id: 1, name: "Apple", quantity: 10, price: 0.5 },
+    { id: 2, name: "Banana", quantity: 20, price: 0.2 },
+];
+
+// Function to display inventory output
+function displayInventoryOutput(message) {
+    document.getElementById('inventory-output').innerHTML = message;
+}
+
+// Function to add an item
+function addItemToInventory() {
+    const id = parseInt(document.getElementById('itemId').value);
+    const name = document.getElementById('itemName').value;
+    const quantity = parseInt(document.getElementById('itemQuantity').value);
+    const price = parseFloat(document.getElementById('itemPrice').value);
+    const newItem = { id, name, quantity, price };
+
+    addItem(inventory, newItem);
+    displayInventoryOutput(`Added item: ${JSON.stringify(newItem)}`);
+}
+
+// Function to update an item
+function updateItemInInventory() {
+    const id = parseInt(document.getElementById('itemId').value);
+    const newDetails = {
+        name: document.getElementById('itemName').value,
+        quantity: parseInt(document.getElementById('itemQuantity').value),
+        price: parseFloat(document.getElementById('itemPrice').value)
+    };
+
+    updateItem(inventory, id, newDetails);
+    displayInventoryOutput(`Updated item with ID ${id}`);
+}
+
+// Function to delete an item
+function deleteItemFromInventory() {
+    const id = parseInt(document.getElementById('itemId').value);
+    deleteItem(inventory, id);
+    displayInventoryOutput(`Deleted item with ID ${id}`);
+}
+
+// Function to get a specific item
+function getItemFromInventory() {
+    const id = parseInt(document.getElementById('itemId').value);
+    const item = getItem(inventory, id);
+    displayInventoryOutput(item ? `Retrieved item: ${JSON.stringify(item)}` : `Item with ID ${id} not found.`);
+}
+
+// Function to print the entire inventory
+function printInventory() {
+    let output = "Current Inventory:<br>";
+    inventory.forEach(item => {
+        output += `ID: ${item.id}, Name: ${item.name}, Quantity: ${item.quantity}, Price: $${item.price.toFixed(2)}<br>`;
+    });
+    displayInventoryOutput(output);
+}
+
+// Functions for managing the inventory as per requirements
+function addItem(inventory, item) {
+    inventory.push(item);
+    console.log("Item added:", item);
+}
+
+function updateItem(inventory, id, newDetails) {
+    const itemIndex = inventory.findIndex(item => item.id === id);
+    if (itemIndex !== -1) {
+        inventory[itemIndex] = { ...inventory[itemIndex], ...newDetails };
+        console.log(`Item with id ${id} updated to:`, inventory[itemIndex]);
+    } else {
+        console.log(`Item with id ${id} not found.`);
+    }
+}
+
+function deleteItem(inventory, id) {
+    const itemIndex = inventory.findIndex(item => item.id === id);
+    if (itemIndex !== -1) {
+        const removedItem = inventory.splice(itemIndex, 1);
+        console.log("Item deleted:", removedItem[0]);
+    } else {
+        console.log(`Item with id ${id} not found.`);
+    }
+}
+
+function getItem(inventory, id) {
+    const item = inventory.find(item => item.id === id);
+    if (item) {
+        console.log("Item found:", item);
+        return item;
+    } else {
+        console.log(`Item with id ${id} not found.`);
+        return null;
+    }
+}
+</script>
+</body>
+</html>
